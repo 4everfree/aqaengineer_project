@@ -37,9 +37,10 @@ def test_success_registration(account: AccountApi, mail: MailApi) -> None:
 
 def test_success_registration_with_kafka_producer(mail: MailApi, kafka_producer: Producer) -> None:
     base = uuid.uuid4().hex
+    login = f"scarface_{base}"
     message = {
-        "login": base,
-        "email": f"{base}@mail.ru",
+        "login": login,
+        "email": f"{login}@mail.ru",
         "password": "123"
     }
     kafka_producer.send('register-events', message)
