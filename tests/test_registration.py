@@ -1,15 +1,10 @@
-import json
 import time
-import uuid
-
-import pytest
 
 from framework.helpers.kafka.consumers.register_events import RegisterEventsSubscriber
-from framework.helpers.kafka.consumers.register_events_error import RegisterEventsErrorSubscriber
-from framework.internal.http.account import AccountApi
+
 from framework.internal.http.mail import MailApi
 from framework.internal.kafka.producer import Producer
-from tests.conftest import account
+
 
 def test_success_registration_with_kafka_producer(
         mail: MailApi,

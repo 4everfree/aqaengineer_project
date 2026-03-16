@@ -1,6 +1,7 @@
 from typing import Generator, Any
 
 import pytest
+import uuid
 
 from framework.helpers.kafka.consumers.register_events import RegisterEventsSubscriber
 from framework.helpers.kafka.consumers.register_events_error import RegisterEventsErrorSubscriber
@@ -61,10 +62,11 @@ def register_message_wrong() -> dict[str, str]:
 
 @pytest.fixture
 def register_message_unknown() -> dict[str, dict[str, str]]:
+    login = uuid.uuid4().hex
     return {
         "input_data": {
-            "login": "string",
-            "email": "string@mail.ru",
+            "login": f"{login}",
+            "email": f"{login}mail.ru",
             "password": "string"
         },
         "error_message": {
