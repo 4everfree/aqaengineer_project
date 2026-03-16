@@ -41,12 +41,15 @@ def test_success_registration_with_kafka_consumer_observer(
     else:
         raise AssertionError("Email not found")
 
-def test_rabbit():
+def test_success_message_sent_with_rabbit(
+        mail: MailApi,
+):
     connection = pika.BlockingConnection(
         pika.URLParameters('amqp://guest:guest@185.185.143.231:5672')
     )
     channel = connection.channel()
-    address = f"{uuid.uuid4().hex}@mail.ru"
+    login = uuid.uuid4().hex
+    address = f"{login}@mail.ru"
     message = {
         "address": address,
         "subject": "test",
@@ -76,3 +79,11 @@ def test_rabbit():
     finally:
         channel.close()
         connection.close()
+
+    for _ in range(10):
+        response = mail.find_message(query=login)
+        if response.json()['total'] > 0:
+            break
+        time.sleep(1)
+    else:
+        raise AssertionError('Email is not found')
