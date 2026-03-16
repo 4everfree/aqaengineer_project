@@ -54,3 +54,11 @@ def test_success_message_sent_with_rabbit(
         'body': 'message'
     }
     rmq_publisher.publish("dm.mail.sending", message)
+
+    for _ in range(10):
+        response = mail.find_message(query=login)
+        if response.json()['total'] > 0:
+            break
+        time.sleep(1)
+    else:
+        raise AssertionError('Email is not found')
